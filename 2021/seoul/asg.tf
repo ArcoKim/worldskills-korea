@@ -72,7 +72,7 @@ resource "aws_launch_template" "stable" {
     }
   }
 
-  user_data = base64encode(<<EOF
+  user_data = base64encode(<<-EOF
     #!/bin/bash
     sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
     systemctl restart sshd
@@ -107,7 +107,7 @@ resource "aws_launch_template" "test" {
     }
   }
 
-  user_data = base64encode(<<EOF
+  user_data = base64encode(<<-EOF
     #!/bin/bash
     sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
     systemctl restart sshd
