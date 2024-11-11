@@ -1,0 +1,19 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.7
+  pre_build:
+    commands:
+      - pip install flask
+  build:
+    commands:
+      - python -m compileall src/app.py
+      - mv src/__pycache__/app.cpython-37.pyc app.pyc
+
+artifacts:
+  files:
+    - app.pyc
+    - scripts/*
+    - appspec.yml

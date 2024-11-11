@@ -1,0 +1,26 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.7
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$REPOSITORY_NAME
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      - pip install flask
+      - ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
+      - IMAGE_TAG=$(date +%y%m%d%H%M%S)
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - python -m compileall src/app.py
+      - mv src/__pycache__/app.cpython-37.pyc src/app.pyc
+      - docker build -t $REPOSITORY_URI:$IMAGE_TAG src
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker images...
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
