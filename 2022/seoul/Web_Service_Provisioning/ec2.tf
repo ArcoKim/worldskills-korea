@@ -33,7 +33,6 @@ resource "aws_security_group" "bastion_a" {
 
 resource "aws_instance" "service_a" {
   ami                         = data.aws_ami.amazon-linux-2023.id
-  associate_public_ip_address = true
   instance_type               = "t3.micro"
   subnet_id                   = aws_subnet.vpc_a_private-a.id
   key_name                    = aws_key_pair.vpc_a.key_name
@@ -81,7 +80,7 @@ resource "aws_instance" "bastion_b" {
   associate_public_ip_address = true
   instance_type               = "t3.micro"
   subnet_id                   = aws_subnet.vpc_b_public-a.id
-  key_name                    = aws_key_pair.skills.key_name
+  key_name                    = aws_key_pair.vpc_b.key_name
   vpc_security_group_ids      = [aws_security_group.bastion_b.id]
 
   tags = {
@@ -111,7 +110,6 @@ resource "aws_security_group" "bastion_b" {
 
 resource "aws_instance" "service_b" {
   ami                         = data.aws_ami.amazon-linux-2023.id
-  associate_public_ip_address = true
   instance_type               = "t3.micro"
   subnet_id                   = aws_subnet.vpc_b_private-b.id
   key_name                    = aws_key_pair.vpc_b.key_name

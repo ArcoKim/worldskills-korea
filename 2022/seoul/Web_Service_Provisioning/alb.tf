@@ -1,15 +1,15 @@
 resource "aws_alb" "main" {
-  name            = "vpc_b-alb"
+  name            = "service-b-alb"
   internal        = true
   security_groups = [aws_security_group.alb.id]
   subnets         = [aws_subnet.vpc_b_private-a.id, aws_subnet.vpc_b_private-b.id]
 }
 
 resource "aws_alb_target_group" "main" {
-  name                 = "vpc_b-tg"
+  name                 = "service-b-tg"
   port                 = 80
   protocol             = "HTTP"
-  vpc_id               = aws_vpc.vpc_B.id
+  vpc_id               = aws_vpc.vpc_b.id
   deregistration_delay = 30
 }
 

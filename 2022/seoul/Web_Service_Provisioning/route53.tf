@@ -4,10 +4,6 @@ resource "aws_route53_zone" "main" {
   vpc {
     vpc_id = aws_vpc.vpc_a.id
   }
-
-  vpc {
-    vpc_id = aws_vpc.vpc_b.id
-  }
 }
 
 resource "aws_route53_record" "web" {

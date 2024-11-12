@@ -53,7 +53,7 @@ resource "aws_nat_gateway" "vpc_a_nat-a" {
     Name = "VPC_A_nat-a"
   }
 
-  depends_on = [aws_internet_gateway.igw]
+  depends_on = [aws_internet_gateway.vpc_a_igw]
 }
 
 resource "aws_route_table" "vpc_a_public" {
@@ -62,11 +62,6 @@ resource "aws_route_table" "vpc_a_public" {
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.vpc_a_igw.id
-  }
-
-  route {
-    cidr_block                = aws_vpc.vpc_b.cidr_block
-    vpc_peering_connection_id = aws_vpc_peering_connection.main.id
   }
 
   tags = {
@@ -167,7 +162,7 @@ resource "aws_nat_gateway" "vpc_b_nat-a" {
     Name = "VPC_B_nat-a"
   }
 
-  depends_on = [aws_internet_gateway.igw]
+  depends_on = [aws_internet_gateway.vpc_b_igw]
 }
 
 resource "aws_route_table" "vpc_b_public" {
@@ -176,11 +171,6 @@ resource "aws_route_table" "vpc_b_public" {
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.vpc_b_igw.id
-  }
-
-  route {
-    cidr_block                = aws_vpc.vpc_a.cidr_block
-    vpc_peering_connection_id = aws_vpc_peering_connection.main.id
   }
 
   tags = {
