@@ -7,7 +7,7 @@ resource "aws_kinesis_stream" "main" {
 }
 
 resource "aws_kinesisanalyticsv2_application" "main" {
-  name                   = "example-flink-application"
+  name                   = "kda_flink_application"
   runtime_environment    = "FLINK-1_13"
   service_execution_role = aws_iam_role.flink.arn
 
@@ -33,4 +33,17 @@ resource "aws_kinesisanalyticsv2_application" "main" {
       }
     }
   }
+
+  cloudwatch_logging_options {
+    log_stream_arn = aws_cloudwatch_log_stream.flink.arn
+  }
+}
+
+resource "aws_cloudwatch_log_group" "flink" {
+  name = "kda_flink_application"
+}
+
+resource "aws_cloudwatch_log_stream" "flink" {
+  name           = "kda_flink_application"
+  log_group_name = aws_cloudwatch_log_group.flink.name
 }

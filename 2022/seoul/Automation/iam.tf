@@ -49,6 +49,11 @@ resource "aws_iam_policy" "cloudwatch" {
   policy = data.aws_iam_policy_document.cloudwatch.json
 }
 
+resource "aws_iam_role_policy_attachment" "cloudwatch" {
+  role       = aws_iam_role.flink.name
+  policy_arn = aws_iam_policy.cloudwatch.arn
+}
+
 data "aws_iam_policy_document" "cloudwatch_logs" {
   statement {
     effect    = "Allow"
@@ -60,6 +65,11 @@ data "aws_iam_policy_document" "cloudwatch_logs" {
 resource "aws_iam_policy" "cloudwatch_logs" {
   name   = "kda_flink_cloudwatch_logs_policy"
   policy = data.aws_iam_policy_document.cloudwatch_logs.json
+}
+
+resource "aws_iam_role_policy_attachment" "cloudwatch_logs" {
+  role       = aws_iam_role.flink.name
+  policy_arn = aws_iam_policy.cloudwatch_logs.arn
 }
 
 data "aws_iam_policy_document" "kinesis" {
@@ -75,9 +85,13 @@ resource "aws_iam_policy" "kinesis" {
   policy = data.aws_iam_policy_document.kinesis.json
 }
 
+resource "aws_iam_role_policy_attachment" "kinesis" {
+  role       = aws_iam_role.flink.name
+  policy_arn = aws_iam_policy.kinesis.arn
+}
+
 data "aws_iam_policy_document" "s3" {
   statement {
-    sid       = ""
     effect    = "Allow"
     resources = ["*"]
     actions   = ["s3:*"]
@@ -87,4 +101,9 @@ data "aws_iam_policy_document" "s3" {
 resource "aws_iam_policy" "s3" {
   name   = "kda_flink_s3_policy"
   policy = data.aws_iam_policy_document.s3.json
+}
+
+resource "aws_iam_role_policy_attachment" "s3" {
+  role       = aws_iam_role.flink.name
+  policy_arn = aws_iam_policy.s3.arn
 }
