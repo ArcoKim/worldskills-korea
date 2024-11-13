@@ -38,8 +38,8 @@ resource "aws_ecs_task_definition" "about" {
 
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
-  cpu = 512
-  memory = 1024
+  cpu                      = 512
+  memory                   = 1024
   container_definitions    = data.template_file.about.rendered
 
   runtime_platform {
@@ -108,8 +108,8 @@ resource "aws_ecs_task_definition" "projects" {
 
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
-  cpu = 512
-  memory = 1024
+  cpu                      = 512
+  memory                   = 1024
   container_definitions    = data.template_file.projects.rendered
 
   runtime_platform {

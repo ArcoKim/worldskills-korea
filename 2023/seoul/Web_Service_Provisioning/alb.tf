@@ -28,11 +28,11 @@ resource "aws_security_group" "alb" {
 }
 
 resource "aws_alb_target_group" "about" {
-  name     = "wsi-about-tg"
-  port     = 5000
-  protocol = "HTTP"
+  name        = "wsi-about-tg"
+  port        = 5000
+  protocol    = "HTTP"
   target_type = "ip"
-  vpc_id   = aws_vpc.main.id
+  vpc_id      = aws_vpc.main.id
 
   health_check {
     path = "/about"
@@ -40,11 +40,11 @@ resource "aws_alb_target_group" "about" {
 }
 
 resource "aws_alb_target_group" "projects" {
-  name     = "wsi-projects-tg"
-  port     = 5000
-  protocol = "HTTP"
+  name        = "wsi-projects-tg"
+  port        = 5000
+  protocol    = "HTTP"
   target_type = "ip"
-  vpc_id   = aws_vpc.main.id
+  vpc_id      = aws_vpc.main.id
 
   health_check {
     path = "/projects"
@@ -81,7 +81,7 @@ resource "aws_alb_listener_rule" "about" {
       values           = ["true"]
     }
   }
- 
+
   condition {
     path_pattern {
       values = ["/about"]

@@ -1,5 +1,6 @@
 resource "aws_ecr_repository" "about" {
-  name = "wsi-about"
+  name         = "wsi-about"
+  force_delete = true
 
   image_scanning_configuration {
     scan_on_push = true
@@ -7,7 +8,8 @@ resource "aws_ecr_repository" "about" {
 }
 
 resource "aws_ecr_repository" "projects" {
-  name = "wsi-projects"
+  name         = "wsi-projects"
+  force_delete = true
 
   image_scanning_configuration {
     scan_on_push = true
