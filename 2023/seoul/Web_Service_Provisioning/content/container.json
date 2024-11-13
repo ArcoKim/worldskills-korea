@@ -2,8 +2,8 @@
     {
         "name": "${app_name}",
         "image": "${app_image}",
-        "cpu": "512",
-        "memory": "1024",
+        "cpu": 512,
+        "memory": 1024,
         "networkMode": "awsvpc",
         "stopTimeout": 60,
         "logConfiguration": {

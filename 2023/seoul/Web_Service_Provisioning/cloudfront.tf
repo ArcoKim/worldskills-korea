@@ -1,4 +1,4 @@
-resource "aws_cloudfront_distribution" "s3_distribution" {
+resource "aws_cloudfront_distribution" "main" {
   origin {
     domain_name = aws_alb.main.dns_name
     origin_id   = aws_alb.main.name
@@ -9,6 +9,11 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
       origin_protocol_policy = "http-only"
       origin_ssl_protocols   = ["TLSv1.2"]
     }
+
+    custom_header {
+      name  = "X-Cdn"
+      value = "true"
+    }
   }
 
   enabled         = true
@@ -18,9 +23,9 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     allowed_methods        = ["GET", "HEAD"]
     cached_methods         = ["GET", "HEAD"]
     target_origin_id       = aws_alb.main.name
-    viewer_protocol_policy = "https-only"
+    viewer_protocol_policy = "redirect-to-https"
     compress               = true
-    cache_policy_id        = data.aws_cloudfront_cache_policy.CachingDisabled
+    cache_policy_id        = data.aws_cloudfront_cache_policy.CachingDisabled.id
   }
 
   ordered_cache_behavior {
@@ -28,9 +33,9 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     allowed_methods        = ["GET", "HEAD"]
     cached_methods         = ["GET", "HEAD"]
     target_origin_id       = aws_alb.main.name
-    viewer_protocol_policy = "https-only"
+    viewer_protocol_policy = "redirect-to-https"
     compress               = true
-    cache_policy_id        = data.aws_cloudfront_cache_policy.CachingOptimized
+    cache_policy_id        = data.aws_cloudfront_cache_policy.CachingOptimized.id
   }
 
   price_class = "PriceClass_All"

@@ -31,6 +31,7 @@ resource "aws_alb_target_group" "about" {
   name     = "wsi-about-tg"
   port     = 5000
   protocol = "HTTP"
+  target_type = "ip"
   vpc_id   = aws_vpc.main.id
 
   health_check {
@@ -42,6 +43,7 @@ resource "aws_alb_target_group" "projects" {
   name     = "wsi-projects-tg"
   port     = 5000
   protocol = "HTTP"
+  target_type = "ip"
   vpc_id   = aws_vpc.main.id
 
   health_check {
@@ -58,21 +60,28 @@ resource "aws_alb_listener" "main" {
     type = "fixed-response"
     fixed_response {
       content_type = "text/plain"
-      message_body = "404 Not Found"
-      status_code  = "404"
+      message_body = "403 Forbidden"
+      status_code  = "403"
     }
   }
 }
 
 resource "aws_alb_listener_rule" "about" {
   listener_arn = aws_alb_listener.main.arn
-  priority     = 1
+  priority     = 10
 
   action {
     type             = "forward"
     target_group_arn = aws_alb_target_group.about.arn
   }
 
+  condition {
+    http_header {
+      http_header_name = "X-Cdn"
+      values           = ["true"]
+    }
+  }
+ 
   condition {
     path_pattern {
       values = ["/about"]
@@ -82,11 +91,18 @@ resource "aws_alb_listener_rule" "about" {
 
 resource "aws_alb_listener_rule" "projects" {
   listener_arn = aws_alb_listener.main.arn
-  priority     = 2
+  priority     = 20
 
   action {
     type             = "forward"
     target_group_arn = aws_alb_target_group.projects.arn
+  }
+
+  condition {
+    http_header {
+      http_header_name = "X-Cdn"
+      values           = ["true"]
+    }
   }
 
   condition {

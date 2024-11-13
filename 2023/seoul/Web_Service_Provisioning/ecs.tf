@@ -33,9 +33,19 @@ data "template_file" "about" {
 }
 
 resource "aws_ecs_task_definition" "about" {
-  family                = "about-task-def"
-  execution_role_arn    = aws_iam_role.ecs_task_execution.arn
-  container_definitions = data.template_file.about.rendered
+  family             = "about-task-def"
+  execution_role_arn = aws_iam_role.ecs_task_execution.arn
+
+  requires_compatibilities = ["FARGATE"]
+  network_mode             = "awsvpc"
+  cpu = 512
+  memory = 1024
+  container_definitions    = data.template_file.about.rendered
+
+  runtime_platform {
+    operating_system_family = "LINUX"
+    cpu_architecture        = "X86_64"
+  }
 
   depends_on = [terraform_data.about]
 }
@@ -93,9 +103,19 @@ data "template_file" "projects" {
 }
 
 resource "aws_ecs_task_definition" "projects" {
-  family                = "projects-task-def"
-  execution_role_arn    = aws_iam_role.ecs_task_execution.arn
-  container_definitions = data.template_file.projects.rendered
+  family             = "projects-task-def"
+  execution_role_arn = aws_iam_role.ecs_task_execution.arn
+
+  requires_compatibilities = ["FARGATE"]
+  network_mode             = "awsvpc"
+  cpu = 512
+  memory = 1024
+  container_definitions    = data.template_file.projects.rendered
+
+  runtime_platform {
+    operating_system_family = "LINUX"
+    cpu_architecture        = "X86_64"
+  }
 
   depends_on = [terraform_data.projects]
 }
