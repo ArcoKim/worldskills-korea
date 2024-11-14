@@ -1,0 +1,40 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "wsi-api",
+    "version": "1.0"
+  },
+  "paths": {
+    "/api": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Empty"
+                }
+              }
+            }
+          }
+        },
+        "x-amazon-apigateway-integration": {
+          "credentials": "${api_role_arn}",
+          "httpMethod": "POST",
+          "uri": "arn:aws:apigateway:ap-northeast-2:kinesis:action/PutRecord",
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "requestTemplates": {
+            "application/json": "{\n    \"StreamName\": \"${stream_name}\",\n    \"Data\": \"$util.base64Encode($input.body)\",\n    \"PartitionKey\": \"$context.requestId\"\n}"
+          },
+          "passthroughBehavior": "never",
+          "type": "aws"
+        }
+      }
+    }
+  }
+}
